@@ -8,28 +8,28 @@
     <title>Study Now</title>
 </head>
 <body>
-    <header>
+    <header aria-label="Application Header">
           <h1>Welcome to Study Now</h1>
     <p>Your one-stop solution for effective study sessions.</p>
     </header>
 
     <div class="app-layout">
-        <aside class="decks-sidebar" aria-label="Decks">
+        <aside class="decks-sidebar" aria-label="Decks Sidebar">
             <h2>Decks</h2>
             <ul>
                 <li>Sample Deck</li>
             </ul>
         </aside>
 
-        <main class="cards-main" aria-label="Cards">
-            <h2>Cards</h2>
-            <section class="card-display" aria-live="polite">
+        <main class="cards-main" aria-label="Cards Area">
+            <h2 id="cards-heading">Cards</h2>
+            <section class="card-display" aria-live="polite" aria-atomic="true" aria-labelledby="cards-heading">
                 <p>Select a deck to begin studying.</p>
             </section>
         </main>
     </div>
 
-    <footer>
+    <footer aria-label="Application Footer">
         <p>&copy; 2026 Study Now</p>
     </footer>
 </body>
