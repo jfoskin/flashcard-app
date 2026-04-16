@@ -1,0 +1,364 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;600;700&display=swap");
+
+:root {
+	--bg: #0b0f13;
+	--panel: #111922;
+	--panel-alt: #182330;
+	--line: #274056;
+	--text: #e9f3ff;
+	--muted: #93adc4;
+	--accent-cyan: #14f1ff;
+	--accent-orange: #ff7a18;
+	--accent-green: #7bff5c;
+	--danger: #ff4d67;
+	--shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+	--radius: 14px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	color: var(--text);
+	font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+	background:
+		radial-gradient(circle at 12% 15%, rgba(20, 241, 255, 0.16), transparent 28%),
+		radial-gradient(circle at 84% 8%, rgba(255, 122, 24, 0.18), transparent 32%),
+		linear-gradient(145deg, #070b10, #111922 40%, #090f14 100%);
+}
+
+header {
+	padding: 1.6rem 1rem 1.1rem;
+	text-align: center;
+	border-bottom: 1px solid var(--line);
+	background: linear-gradient(180deg, rgba(17, 25, 34, 0.9), rgba(17, 25, 34, 0.45));
+	animation: rise-in 500ms ease-out;
+}
+
+header h1 {
+	margin: 0;
+	font-family: "Bebas Neue", Impact, sans-serif;
+	font-size: clamp(2.3rem, 4.1vw, 3.6rem);
+	letter-spacing: 0.08em;
+	color: #dff8ff;
+}
+
+header p {
+	margin: 0.2rem 0 0;
+	color: var(--muted);
+	font-weight: 600;
+}
+
+.app-layout {
+	width: min(1100px, 94vw);
+	margin: 1.6rem auto;
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: minmax(220px, 280px) 1fr;
+}
+
+.decks-sidebar,
+.cards-main,
+footer {
+	background: linear-gradient(165deg, rgba(24, 35, 48, 0.92), rgba(16, 24, 33, 0.9));
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+}
+
+.decks-sidebar {
+	padding: 1rem;
+	animation: slide-in-left 520ms ease-out;
+}
+
+.decks-sidebar h2,
+.cards-main h2 {
+	margin: 0 0 0.8rem;
+	font-family: "Bebas Neue", Impact, sans-serif;
+	letter-spacing: 0.08em;
+	font-size: 1.6rem;
+}
+
+.decks-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 0.55rem;
+}
+
+.deck-btn {
+	width: 100%;
+	text-align: left;
+	border-radius: 10px;
+	border: 1px solid rgba(39, 64, 86, 0.9);
+	background: linear-gradient(180deg, #1a2735, #14202b);
+	color: var(--text);
+	padding: 0.75rem;
+	font: inherit;
+	cursor: pointer;
+	transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.deck-btn:hover {
+	transform: translateX(4px);
+	border-color: var(--accent-cyan);
+}
+
+.deck-btn.is-active {
+	border-color: var(--accent-orange);
+	box-shadow: 0 0 0 2px rgba(255, 122, 24, 0.2);
+}
+
+.deck-btn .deck-title {
+	display: block;
+	font-weight: 700;
+}
+
+.deck-btn .deck-sub {
+	display: block;
+	margin-top: 0.12rem;
+	color: var(--muted);
+	font-size: 0.86rem;
+}
+
+.cards-main {
+	padding: 1rem;
+	animation: slide-in-right 520ms ease-out;
+}
+
+.card-display {
+	display: grid;
+	gap: 0.95rem;
+}
+
+.status-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.65rem;
+}
+
+.status-grid p {
+	margin: 0;
+	background: rgba(11, 15, 19, 0.6);
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	padding: 0.5rem;
+	font-size: 0.92rem;
+	color: var(--muted);
+}
+
+.status-grid strong {
+	color: #cde8ff;
+}
+
+.flashcard {
+	border: none;
+	padding: 0;
+	border-radius: 16px;
+	background: transparent;
+	cursor: pointer;
+	text-align: left;
+}
+
+.flashcard-inner {
+	position: relative;
+	display: block;
+	min-height: 280px;
+	transform-style: preserve-3d;
+	transition: transform 420ms ease;
+}
+
+.flashcard.is-flipped .flashcard-inner {
+	transform: rotateY(180deg);
+}
+
+.flashcard-face {
+	position: absolute;
+	inset: 0;
+	border-radius: 16px;
+	padding: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 0.8rem;
+	border: 1px solid var(--line);
+	box-shadow: var(--shadow);
+	backface-visibility: hidden;
+}
+
+.flashcard-front {
+	background:
+		linear-gradient(140deg, rgba(20, 241, 255, 0.2), rgba(20, 241, 255, 0.03) 40%),
+		linear-gradient(145deg, #1a2b3a, #102030);
+}
+
+.flashcard-back {
+	background:
+		linear-gradient(140deg, rgba(255, 122, 24, 0.2), rgba(255, 122, 24, 0.03) 45%),
+		linear-gradient(145deg, #332115, #241811);
+	transform: rotateY(180deg);
+}
+
+.face-label {
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-size: 0.8rem;
+	color: var(--muted);
+}
+
+#card-front-text,
+#card-back-text {
+	font-size: clamp(1.15rem, 2.4vw, 1.52rem);
+	line-height: 1.42;
+	text-align: center;
+	max-width: 34ch;
+}
+
+.card-controls,
+.knowledge-controls {
+	display: grid;
+	gap: 0.55rem;
+}
+
+.card-controls {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.knowledge-controls {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+button {
+	font: inherit;
+	color: var(--text);
+	border-radius: 9px;
+	border: 1px solid #34516a;
+	padding: 0.65rem 0.75rem;
+	background: linear-gradient(180deg, #223446, #182735);
+	cursor: pointer;
+	transition: transform 170ms ease, border-color 170ms ease, background 170ms ease;
+}
+
+button:hover:not(:disabled) {
+	border-color: var(--accent-cyan);
+	transform: translateY(-1px);
+}
+
+button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+#known-btn {
+	background: linear-gradient(180deg, #264620, #1d3619);
+	border-color: #3f7852;
+}
+
+#unknown-btn {
+	background: linear-gradient(180deg, #4f1e2a, #39151f);
+	border-color: #8f3147;
+}
+
+#known-btn.is-selected {
+	border-color: var(--accent-green);
+	box-shadow: 0 0 0 2px rgba(123, 255, 92, 0.25);
+}
+
+#unknown-btn.is-selected {
+	border-color: var(--danger);
+	box-shadow: 0 0 0 2px rgba(255, 77, 103, 0.25);
+}
+
+footer {
+	width: min(1100px, 94vw);
+	margin: 0 auto 1.4rem;
+	padding: 0.85rem;
+	text-align: center;
+	color: var(--muted);
+	font-size: 0.9rem;
+	animation: rise-in 560ms ease-out;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+:focus-visible {
+	outline: 2px solid var(--accent-cyan);
+	outline-offset: 2px;
+}
+
+@keyframes rise-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slide-in-left {
+	from {
+		opacity: 0;
+		transform: translateX(-18px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes slide-in-right {
+	from {
+		opacity: 0;
+		transform: translateX(18px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@media (max-width: 900px) {
+	.app-layout {
+		grid-template-columns: 1fr;
+	}
+
+	.status-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.flashcard-inner {
+		min-height: 250px;
+	}
+}
+
+@media (max-width: 650px) {
+	.card-controls {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.knowledge-controls {
+		grid-template-columns: 1fr;
+	}
+
+	#card-front-text,
+	#card-back-text {
+		font-size: 1.03rem;
+	}
+}

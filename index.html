@@ -4,27 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
     <title>Study Now</title>
 </head>
 <body>
     <header aria-label="Application Header">
-          <h1>Welcome to Study Now</h1>
-    <p>Your one-stop solution for effective study sessions.</p>
+        <h1>Study Now</h1>
+        <p>Hip Hop Fact Flashcards</p>
     </header>
 
     <div class="app-layout">
         <aside class="decks-sidebar" aria-label="Decks Sidebar">
             <h2>Decks</h2>
-            <ul>
-                <li>Sample Deck</li>
+            <ul id="decks-list" class="decks-list" aria-label="Select a deck">
+                <li>Loading decks...</li>
             </ul>
         </aside>
 
         <main class="cards-main" aria-label="Cards Area">
             <h2 id="cards-heading">Cards</h2>
             <section class="card-display" aria-live="polite" aria-atomic="true" aria-labelledby="cards-heading">
-                <p>Select a deck to begin studying.</p>
+                <div class="status-grid" aria-label="Deck status">
+                    <p><strong>Deck:</strong> <span id="deck-name">-</span></p>
+                    <p><strong>Card:</strong> <span id="card-position">0 / 0</span></p>
+                    <p><strong>Known:</strong> <span id="known-count">0</span></p>
+                </div>
+
+                <button id="flashcard" class="flashcard" type="button" aria-label="Flip flashcard">
+                    <span class="flashcard-inner" id="flashcard-inner">
+                        <span class="flashcard-face flashcard-front">
+                            <span class="face-label">Question</span>
+                            <span id="card-front-text">Select a deck to start.</span>
+                        </span>
+                        <span class="flashcard-face flashcard-back">
+                            <span class="face-label">Answer</span>
+                            <span id="card-back-text">The answer appears after you flip.</span>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="card-controls" aria-label="Card controls">
+                    <button id="prev-btn" type="button" aria-label="Previous card">Previous</button>
+                    <button id="flip-btn" type="button" aria-label="Flip card">Flip</button>
+                    <button id="next-btn" type="button" aria-label="Next card">Next</button>
+                    <button id="shuffle-btn" type="button" aria-label="Shuffle deck">Shuffle</button>
+                </div>
+
+                <div class="knowledge-controls" aria-label="Knowledge controls">
+                    <button id="known-btn" type="button" aria-label="Mark card as known">Known</button>
+                    <button id="unknown-btn" type="button" aria-label="Mark card as unknown">Unknown</button>
+                </div>
+
+                <p id="live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></p>
             </section>
         </main>
     </div>
