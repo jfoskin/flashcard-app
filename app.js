@@ -1,6 +1,7 @@
 const STORAGE_KEY = "hiphop-flashcards-state";
 const STORAGE_VERSION = 1;
 
+// Static seed data for all decks/cards. Runtime state tracks order/progress separately.
 const DECKS = [
 	{
 		id: "legends",
@@ -53,6 +54,7 @@ const deckById = new Map(DECKS.map((deck) => [deck.id, deck]));
 
 class FlashcardApp {
 	constructor() {
+		// Bootstrap app state, cache DOM references, wire events, then paint initial UI.
 		this.state = this.loadState();
 		this.isFlipped = false;
 		this.elements = this.getElements();
@@ -60,6 +62,7 @@ class FlashcardApp {
 		this.render();
 	}
 
+	// Cache all DOM nodes used by render and event handlers.
 	getElements() {
 		return {
 			decksList: document.getElementById("decks-list"),
@@ -81,6 +84,7 @@ class FlashcardApp {
 	}
 
 	bindEvents() {
+		// Event delegation keeps deck button wiring stable even after re-rendered list HTML.
 		this.elements.decksList.addEventListener("click", (event) => {
 			const button = event.target.closest("button[data-deck-id]");
 			if (!button) {
@@ -102,6 +106,7 @@ class FlashcardApp {
 		const deckOrders = {};
 		const deckIndexes = {};
 		for (const deck of DECKS) {
+			// Keep a mutable per-deck card order so shuffle does not mutate source deck data.
 			deckOrders[deck.id] = deck.cards.map((card) => card.id);
 			deckIndexes[deck.id] = 0;
 		}
@@ -115,6 +120,7 @@ class FlashcardApp {
 	}
 
 	loadState() {
+		// Use persisted progress when valid; otherwise recover with a safe default state.
 		const fallback = this.getDefaultState();
 		const raw = window.localStorage.getItem(STORAGE_KEY);
 		if (!raw) {
@@ -133,6 +139,7 @@ class FlashcardApp {
 	}
 
 	isValidState(value) {
+		// Validate shape + version to avoid crashes from stale/corrupted localStorage payloads.
 		if (!value || typeof value !== "object") {
 			return false;
 		}
@@ -165,10 +172,12 @@ class FlashcardApp {
 		});
 	}
 
+	// Persist current runtime state so progress survives page reloads.
 	saveState() {
 		window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
 	}
 
+	// Return the active deck object from the selected deck id.
 	getSelectedDeck() {
 		return deckById.get(this.state.selectedDeckId);
 	}
@@ -178,9 +187,11 @@ class FlashcardApp {
 		const order = this.state.deckOrders[deck.id];
 		const index = this.state.deckIndexes[deck.id];
 		const cardId = order[index];
+		// Fallback guards against an unexpected missing id while preserving app usability.
 		return deck.cards.find((card) => card.id === cardId) || deck.cards[0];
 	}
 
+	// Switch active deck, reset flip state, then re-render and announce the change.
 	selectDeck(deckId) {
 		if (!deckById.has(deckId) || this.state.selectedDeckId === deckId) {
 			return;
@@ -194,6 +205,7 @@ class FlashcardApp {
 		this.announce(`Switched to ${deck.title}.`);
 	}
 
+	// Toggle question/answer face and sync the flip button label for accessibility.
 	flipCard() {
 		this.isFlipped = !this.isFlipped;
 		this.elements.flashcard.classList.toggle("is-flipped", this.isFlipped);
@@ -205,6 +217,7 @@ class FlashcardApp {
 		this.announce(this.isFlipped ? "Showing answer." : "Showing question.");
 	}
 
+	// Move to the previous card when possible and reset to question side.
 	previousCard() {
 		const deck = this.getSelectedDeck();
 		const index = this.state.deckIndexes[deck.id];
@@ -218,6 +231,7 @@ class FlashcardApp {
 		this.announce(`Card ${this.state.deckIndexes[deck.id] + 1} of ${deck.cards.length}.`);
 	}
 
+	// Move to the next card when possible and reset to question side.
 	nextCard() {
 		const deck = this.getSelectedDeck();
 		const index = this.state.deckIndexes[deck.id];
@@ -234,6 +248,7 @@ class FlashcardApp {
 	shuffleDeck() {
 		const deck = this.getSelectedDeck();
 		const order = [...this.state.deckOrders[deck.id]];
+		// Fisher-Yates shuffle for unbiased in-place randomization.
 		for (let i = order.length - 1; i > 0; i -= 1) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[order[i], order[j]] = [order[j], order[i]];
@@ -246,6 +261,7 @@ class FlashcardApp {
 		this.announce(`${deck.title} shuffled.`);
 	}
 
+	// Record known/unknown status for the current card and refresh progress UI.
 	markCard(status) {
 		const card = this.getCurrentCard();
 		this.state.knownMap[card.id] = status;
@@ -257,6 +273,7 @@ class FlashcardApp {
 
 	renderDecks() {
 		const selectedId = this.state.selectedDeckId;
+		// Rebuild list from source decks so active state always matches current app state.
 		this.elements.decksList.innerHTML = DECKS.map((deck) => {
 			const isActive = deck.id === selectedId;
 			return `
@@ -288,11 +305,13 @@ class FlashcardApp {
 			this.isFlipped ? "Show question side" : "Show answer side"
 		);
 
+		// Guardrails: prevent navigation past first/last card in current deck order.
 		const index = this.state.deckIndexes[deck.id];
 		this.elements.prevBtn.disabled = index === 0;
 		this.elements.nextBtn.disabled = index === deck.cards.length - 1;
 	}
 
+	// Update deck title, card index, and known counter summary text.
 	renderStatus() {
 		const deck = this.getSelectedDeck();
 		const index = this.state.deckIndexes[deck.id];
@@ -306,6 +325,7 @@ class FlashcardApp {
 		this.elements.knownCount.textContent = `${knownCount} / ${total}`;
 	}
 
+	// Highlight the known/unknown action matching the current card's saved status.
 	renderKnowledgeButtons() {
 		const card = this.getCurrentCard();
 		const status = this.state.knownMap[card.id];
@@ -314,6 +334,7 @@ class FlashcardApp {
 	}
 
 	announce(message) {
+		// Clear then set on next frame so assistive tech reliably announces repeated updates.
 		this.elements.liveAnnouncer.textContent = "";
 		window.requestAnimationFrame(() => {
 			this.elements.liveAnnouncer.textContent = message;
@@ -321,6 +342,7 @@ class FlashcardApp {
 	}
 
 	render() {
+		// Single render entry point keeps UI updates predictable after any state change.
 		this.renderDecks();
 		this.renderCard();
 		this.renderStatus();
@@ -328,6 +350,7 @@ class FlashcardApp {
 	}
 }
 
+// Wait for the document to be ready before querying nodes and starting the app.
 window.addEventListener("DOMContentLoaded", () => {
 	new FlashcardApp();
 });
