@@ -52,12 +52,16 @@ const DECKS = [
 
 const deckById = new Map(DECKS.map((deck) => [deck.id, deck]));
 
+// Main application class encapsulates all state and behavior for the flashcard app.
+
+
 class FlashcardApp {
 	constructor() {
-		// Bootstrap app state, cache DOM references, wire events, then paint initial UI.
+        // Load persisted state or fall back to a safe default. Then cache DOM nodes and kick off the first render.
 		this.state = this.loadState();
 		this.isFlipped = false;
 		this.elements = this.getElements();
+        //
 		this.bindEvents();
 		this.render();
 	}
@@ -102,6 +106,7 @@ class FlashcardApp {
 		this.elements.unknownBtn.addEventListener("click", () => this.markCard("unknown"));
 	}
 
+    // Generate a default state object based on the static DECKS data structure.
 	getDefaultState() {
 		const deckOrders = {};
 		const deckIndexes = {};
