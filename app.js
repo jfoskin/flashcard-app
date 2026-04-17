@@ -44,7 +44,7 @@ const DECKS = [
 			{ id: "modern-5", question: "Which artist's 2018 album 'Astroworld' became a major modern rap pop-culture moment?", answer: "Travis Scott." },
 			{ id: "modern-6", question: "Who released the 2019 chart-topping single 'Old Town Road'?", answer: "Lil Nas X." },
 			{ id: "modern-7", question: "Which rapper's album 'The Miseducation of Lauryn Hill' continues to influence lyric-focused artists today?", answer: "Lauryn Hill." },
-			{ id: "modern-8", question: "What platform era changed how many rap records broke into mainstream charts: radio-first or streaming-first?", answer: "Streaming-first." }
+			{ id: "modern-8", question: "What rapper won the 2024 hip hop battle?", answer: "Kendrick Lamar Duckworth" }
 		]
 	}
 ];

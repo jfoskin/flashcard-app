@@ -2,6 +2,7 @@
 
 :root {
 	--bg: #0b0f13;
+	--bg-overlay-opacity: 0.15;
 	--panel: #111922;
 	--panel-alt: #182330;
 	--line: #274056;
@@ -25,9 +26,11 @@ body {
 	color: var(--text);
 	font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
 	background:
-		radial-gradient(circle at 12% 15%, rgba(20, 241, 255, 0.16), transparent 28%),
-		radial-gradient(circle at 84% 8%, rgba(255, 122, 24, 0.18), transparent 32%),
-		linear-gradient(145deg, #070b10, #111922 40%, #090f14 100%);
+		linear-gradient(
+			rgba(7, 11, 16, var(--bg-overlay-opacity)),
+			rgba(7, 11, 16, var(--bg-overlay-opacity))
+		),
+		url("./assests/oscar-keys-ojVMh1QTVGY-unsplash.jpg") center / cover no-repeat fixed;
 }
 
 header {
@@ -209,6 +212,16 @@ footer {
 	letter-spacing: 0.08em;
 	font-size: 0.8rem;
 	color: var(--muted);
+}
+
+.question-face-image {
+	width: min(100%, 320px);
+	height: 110px;
+	object-fit: cover;
+	border-radius: 10px;
+	border: 1px solid rgba(39, 64, 86, 0.85);
+	opacity: 0.85;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
 }
 
 #card-front-text,
